@@ -3,7 +3,7 @@ PySpark Data Processing
 
 ## Overview
 
-`Bigdata.py`` - PySpark script to read a fixed-width file from Azure Blob Storage, extract substrings, and convert the resulting RDD to a PySpark DataFrame
+`Bigdata.py` - PySpark script to read a fixed-width file from Azure Blob Storage, extract substrings, and convert the resulting RDD to a PySpark DataFrame. The original Azure Databricks Notebook can be found [here](https://adb-8157169415581468.8.azuredatabricks.net/?o=8157169415581468#notebook/2452887077650528).
 
 This script was export from Azure Databrick Notebook. It reads a fixed-width file from Azure Blob Storage, extracts substrings using PySpark's withColumn() function, and converts the resulting RDD to a PySpark DataFrame using toDF(). It then uses PySpark's regexp_extract() function to extract non-numeric characters from the ID column, creates a temporary view of the DataFrame using createOrReplaceTempView(), and runs a SQL query on the view using spark.sql() to group the data by country, GSN flag, ID, and name, and order the results by country.
 
@@ -16,15 +16,21 @@ This script was export from Azure Databrick Notebook. It reads a fixed-width fil
 
 ## Usage
 
-### Create an Azure Blob Storage account and container. For more information, see Create an Azure Blob Storage account and Create a container in Azure Blob Storage.
+* Create an Azure Blob Storage account and container. For more information, see Create an Azure Blob Storage account and Create a container in Azure Blob Storage.
 
 Some of the data source files are big in size, in such case you may need to use Azure Blob Storage to store the data source files.
 
-### Upload the fixed-width file to the container. For more information, see Upload a block blob to Azure Blob Storage.
+* Upload the fixed-width file to the container. For more information, see Upload a block blob to Azure Blob Storage.
 
-In order to access the data source files, you need to download the access key from Azure Portal.
+In order to access the data source files, you need to mark down the access key from Azure Portal.
 
-### Set the container_name and storage_account variables in the script to the name of your Azure Blob Storage container and storage account, respectively.
+* Create an Azure Databricks workspace. For more information, see Create an Azure Databricks workspace.
+
+* Create a cluster in Azure Databricks. For more information, see Create a Spark cluster in Azure Databricks.
+
+* Create a notebook in Azure Databricks. For more information, see Create a notebook in Azure Databricks.
+
+* Set the container_name and storage_account variables in the script to the name of your Azure Blob Storage container and storage account, respectively.
 
 ```python
 # Set the Blob storage account key and container name
@@ -32,7 +38,7 @@ storage_account = "***"
 storage_account_key = "***"
 container_name = "***"
 ```
-### Set the file_name variable in the script to the name of the fixed-width file you want to read.
+* Set the file_name variable in the script to the name of the fixed-width file you want to read.
 
 ```python
 # Set the CSV file name and path
@@ -53,7 +59,7 @@ positions = [
 ]
 ```
 
-### Create the schema for the DataFrame.
+* Create the schema for the DataFrame.
 
 ```python
 # Read the fixed-width file into a PySpark DataFrame and extract substrings using withColumn()
@@ -73,7 +79,7 @@ df = df.selectExpr(
 )
 ```
 
-### Convert the resulting RDD to a PySpark DataFrame using toDF().
+* Convert the resulting RDD to a PySpark DataFrame using toDF().
 
 ```python
 # Convert the resulting RDD to a PySpark DataFrame using toDF()
@@ -88,7 +94,7 @@ Output:
 
 ## SQL Query
 
-### Use PySpark's regexp_extract() function to extract non-numeric characters from the ID column.
+* Use PySpark's regexp_extract() function to extract non-numeric characters from the ID column, and use it to create a new column called COUNTRY.
 
 ```python
 # COMMAND ----------
@@ -105,7 +111,7 @@ df = df.withColumn("COUNTRY", regexp_extract(df.ID, pattern, 0))
 Output:
 ![Alt text](country.png)
 
-### Create a temporary view of the DataFrame using createOrReplaceTempView().
+* Create a temporary view of the DataFrame using createOrReplaceTempView(), it then runs a SQL query on the view using spark.sql() to group the data by country, GSN flag, ID, and name, and order the results by country.
 
 ```python
 # COMMAND ----------
